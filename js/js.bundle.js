@@ -181,29 +181,46 @@ module.exports = createElement
 /*!***********************************!*\
   !*** ./js/modules/noteChanger.js ***!
   \***********************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+let notes = __webpack_require__(/*! ./../dataNotes */ "./js/dataNotes.js")
 
-
-
-const deleteNote = (notes,id) => {
-  return notes = notes.filter((n) => n.id !== id )
+const getNotes = () => {
+  return notes
 }
 
-const archiveNote = (notes,id) => {
-  return notes = notes.map((n) =>{ 
+const deleteNote = (id) => {
+  console. log(id)
+  notes = notes.filter((n) => n.id !== id )
+}
+
+const archiveNote = (id) => {
+  notes = notes.map((n) =>{ 
     return n.id === id ? {...n, isArchive: !n.isArchive } : n
   })
 }
 
-const updateNote = (notes,id) => {
-  return notes.map((n) => n.id === id ? '': '')
+const updateNote = (id) => {
+  notes = notes.map((n) => n.id === id ? '': '')
+}
+
+const archiveNoteAll = (id) => {
+  notes = notes.map((n) =>{ 
+    return {...n, isArchive: true }
+  })
+}
+
+const deleteNoteAll = (id) => {
+  notes = []
 }
 
 module.exports = {
+  getNotes,
   deleteNote,
   archiveNote,
-  updateNote
+  updateNote,
+  deleteNoteAll,
+  archiveNoteAll
 }
 
 /***/ })
@@ -241,16 +258,15 @@ var __webpack_exports__ = {};
 /*!**********************!*\
   !*** ./js/script.js ***!
   \**********************/
-let notes = __webpack_require__(/*! ./dataNotes.js */ "./js/dataNotes.js")
+
 let createElement = __webpack_require__(/*! ./modules/createElement */ "./js/modules/createElement.js")
 let noteChanger = __webpack_require__(/*! ./modules/noteChanger */ "./js/modules/noteChanger.js")
 
 const table = document.querySelector('.table-main')
 let showArchive = false
 
-
 const renderTable = () => {
-  let showNotes = notes.filter((n) => n.isArchive === showArchive)
+  let showNotes = noteChanger.getNotes().filter((n) => n.isArchive === showArchive)
   table.innerHTML = createElement.tableHeader()
   for ( n of showNotes) {
     const tr = createElement.tableRow(n)
@@ -272,15 +288,15 @@ toggleShowArchive()
 table.addEventListener('click', (event) => {
   const id = event.target.parentNode.id
   if(event.target.hasAttribute('data-update')){
-    notes = noteChanger.updateNote(notes,id)
+    noteChanger.updateNote(id)
     renderTable()
   }
   if(event.target.hasAttribute('data-archive')){
-    notes = noteChanger.archiveNote(notes,id)
+    noteChanger.archiveNote(id)
     renderTable()
   }
   if(event.target.hasAttribute('data-delete')){
-    notes = noteChanger.deleteNote(notes,id)
+    noteChanger.deleteNote(id)
     renderTable()
   }
 });

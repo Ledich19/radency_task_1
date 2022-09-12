@@ -1,13 +1,12 @@
-let notes = require('./dataNotes.js')
+
 let createElement = require('./modules/createElement')
 let noteChanger = require('./modules/noteChanger')
 
 const table = document.querySelector('.table-main')
 let showArchive = false
 
-
 const renderTable = () => {
-  let showNotes = notes.filter((n) => n.isArchive === showArchive)
+  let showNotes = noteChanger.getNotes().filter((n) => n.isArchive === showArchive)
   table.innerHTML = createElement.tableHeader()
   for ( n of showNotes) {
     const tr = createElement.tableRow(n)
@@ -29,15 +28,15 @@ toggleShowArchive()
 table.addEventListener('click', (event) => {
   const id = event.target.parentNode.id
   if(event.target.hasAttribute('data-update')){
-    notes = noteChanger.updateNote(notes,id)
+    noteChanger.updateNote(id)
     renderTable()
   }
   if(event.target.hasAttribute('data-archive')){
-    notes = noteChanger.archiveNote(notes,id)
+    noteChanger.archiveNote(id)
     renderTable()
   }
   if(event.target.hasAttribute('data-delete')){
-    notes = noteChanger.deleteNote(notes,id)
+    noteChanger.deleteNote(id)
     renderTable()
   }
 });

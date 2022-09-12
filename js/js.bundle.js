@@ -146,9 +146,9 @@ const tableRow = () => {
                         <td class="row__content">${n.content}</td>
                         <td class="row__dates">${n.date}</td>
                         <td id=${n.id} class="row__buttons">
-                          <button data-archive class="row__arh">ARC</button>
-                          <button data-delete class="row__del">DEL</button>
-                          <button data-update class="row__upd">UPD</button>
+                          <button data-archive class="row__arh">A</button>
+                          <button data-delete class="row__del">D</button>
+                          <button data-update class="row__upd">U</button>
                         </td>`
   return tr
 }
@@ -161,8 +161,8 @@ const tableHeader = () => {
   <th class="row__content">Content</th>
   <th class="row__dates"></th>
   <th class="row__btns">
-    <button class="row__arh">ARC</button>
-    <button class="row__del">DEL</button>
+    <button class="row__arh">A</button>
+    <button class="row__del">D</button>
   </th>
   </tr>`
 }
@@ -182,6 +182,9 @@ module.exports = createElement
   !*** ./js/modules/noteChanger.js ***!
   \***********************************/
 /***/ ((module) => {
+
+
+
 
 const deleteNote = (notes,id) => {
   return notes = notes.filter((n) => n.id !== id )
@@ -242,12 +245,12 @@ let notes = __webpack_require__(/*! ./dataNotes.js */ "./js/dataNotes.js")
 let createElement = __webpack_require__(/*! ./modules/createElement */ "./js/modules/createElement.js")
 let noteChanger = __webpack_require__(/*! ./modules/noteChanger */ "./js/modules/noteChanger.js")
 
+const table = document.querySelector('.table-main')
+let showArchive = false
 
-const table = document.querySelector('.table')
-let filterIsArchive = false
 
 const renderTable = () => {
-  let showNotes = notes.filter((n) => n.isArchive === filterIsArchive)
+  let showNotes = notes.filter((n) => n.isArchive === showArchive)
   table.innerHTML = createElement.tableHeader()
   for ( n of showNotes) {
     const tr = createElement.tableRow(n)
@@ -255,6 +258,16 @@ const renderTable = () => {
   }
 }
 renderTable()
+
+const toggleShowArchive = () => {
+  const toggleBtn = document.querySelector('.toggle-archive')
+  toggleBtn.addEventListener('click', (event) => {
+    showArchive = !showArchive
+    event.target.innerHTML = showArchive ? 'show notes' : 'show archive'
+    renderTable()
+  });
+}
+toggleShowArchive()
 
 table.addEventListener('click', (event) => {
   const id = event.target.parentNode.id
@@ -271,6 +284,8 @@ table.addEventListener('click', (event) => {
     renderTable()
   }
 });
+
+
 
 
 })();

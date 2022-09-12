@@ -7,9 +7,9 @@ const tableRow = () => {
                         <td class="row__content">${n.content}</td>
                         <td class="row__dates">${n.date}</td>
                         <td id=${n.id} class="row__buttons">
-                          <button data-archive class="row__arh">ARC</button>
-                          <button data-delete class="row__del">DEL</button>
-                          <button data-update class="row__upd">UPD</button>
+                          <button data-archive class="row__arh">A</button>
+                          <button data-delete class="row__del">D</button>
+                          <button data-update class="row__upd">U</button>
                         </td>`
   return tr
 }
@@ -22,8 +22,8 @@ const tableHeader = () => {
   <th class="row__content">Content</th>
   <th class="row__dates"></th>
   <th class="row__btns">
-    <button class="row__arh">ARC</button>
-    <button class="row__del">DEL</button>
+    <button class="row__arh">A</button>
+    <button class="row__del">D</button>
   </th>
   </tr>`
 }

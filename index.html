@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,12 +8,32 @@
   <title>Document</title>
   <link rel="stylesheet" href="./style.css">
 </head>
-<body>
-  <table class="table">
-    
 
-  
+<body>
+  <table class="table-main">
+
+
+
   </table>
+  <button class="create-note">create note</button>
+  <button class="toggle-archive">show archive</button>
+  <table class="table-info">
+
+
+
+  </table>
+  <form class="note-form">
+    <span>Name: </span><input type="text" name="name">
+    <span>Category: </span><select name="note-form__category" name="category">
+      <option value="Random Thought">Random Thought</option>
+      <option value="Idea">Idea</option>
+      <option value="Task">Task</option>
+    </select>
+    <span>Date: </span><input type="date" name="dates">
+    <span>Note: </span><textarea type="text" name="name"></textarea>
+  </form>
+
 </body>
 <script src="./js/js.bundle.js"></script>
+
 </html>

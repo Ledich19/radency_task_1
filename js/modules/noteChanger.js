@@ -1,3 +1,6 @@
+
+
+
 const deleteNote = (notes,id) => {
   return notes = notes.filter((n) => n.id !== id )
 }

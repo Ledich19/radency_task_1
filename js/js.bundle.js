@@ -194,20 +194,29 @@ module.exports = createElement
 const generateId = () => {
   return (Math.floor(Math.random() * (1000000 - 1 + 1)) + 1).toString() ;
 }
-
+const showElement = (e) => {
+  e.classList.remove('hide');
+  e.classList.add('show');
+}
+const hiddenElement = (e) => {
+e.classList.add('hide');
+e.classList.remove('show');
+}
 module.exports = {
   generateId, 
+  showElement,
+  hiddenElement
 }
 
 /***/ }),
 
-/***/ "./js/modules/noteChanger.js":
-/*!***********************************!*\
-  !*** ./js/modules/noteChanger.js ***!
-  \***********************************/
+/***/ "./js/modules/noteServices.js":
+/*!************************************!*\
+  !*** ./js/modules/noteServices.js ***!
+  \************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-let notes = __webpack_require__(/*! ./../dataNotes */ "./js/dataNotes.js")
+let notes = __webpack_require__(/*! ../dataNotes */ "./js/dataNotes.js")
 
 const getNotes = () => {
   return notes
@@ -288,12 +297,16 @@ var __webpack_exports__ = {};
   !*** ./js/script.js ***!
   \**********************/
 let createElement = __webpack_require__(/*! ./modules/createElement */ "./js/modules/createElement.js")
-const {
-  generateId
-} = __webpack_require__(/*! ./modules/helper */ "./js/modules/helper.js")
-let noteChanger = __webpack_require__(/*! ./modules/noteChanger */ "./js/modules/noteChanger.js")
+let noteChanger = __webpack_require__(/*! ./modules/noteServices */ "./js/modules/noteServices.js")
+const { generateId, showElement, hiddenElement } = __webpack_require__(/*! ./modules/helper */ "./js/modules/helper.js")
 
+const saveNoteBtn = document.querySelector('#save-note')
+const closeNoteBtn = document.querySelector('#close-form')
 const table = document.querySelector('.table-main')
+const createNoteBtn = document.querySelector('#create-note')
+const notaForm = document.querySelector('#note-form')
+const updateFormBtn = document.querySelector('#update-note')
+
 let showArchive = false
 
 const renderTable = () => {
@@ -319,8 +332,8 @@ toggleShowArchive()
 table.addEventListener('click', (event) => {
   const id = event.target.parentNode.id
   if (event.target.hasAttribute('data-update')) {
-    noteChanger.updateNote(id)
-    renderTable()
+    showElement(notaForm)
+    showElement(updateFormBtn)
   }
   if (event.target.hasAttribute('data-archive')) {
     noteChanger.archiveNote(id)
@@ -332,9 +345,8 @@ table.addEventListener('click', (event) => {
   }
 });
 
-const notaForm = document.querySelector('#note-form')
-notaForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+const getDataForm = () => {
+  const notaForm = document.querySelector('#note-form')
   const formData = new FormData(notaForm)
   const note = {
     id: generateId(),
@@ -345,9 +357,35 @@ notaForm.addEventListener('submit', (e) => {
     date: [formData.get('date')],
     isArchive: false
   }
-  noteChanger.addNote(note)
+  return note
+}
+
+
+
+saveNoteBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  noteChanger.addNote(getDataForm())
   renderTable()
 })
+
+closeNoteBtn.addEventListener('click', (e) => {
+  hiddenElement(saveNoteBtn)
+  hiddenElement(updateFormBtn)
+  hiddenElement(notaForm)
+})
+
+updateFormBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  noteChanger.updateNote(getDataForm())
+  renderTable()
+})
+
+createNoteBtn.addEventListener('click', (e) => {
+  showElement(saveNoteBtn)
+  showElement(notaForm)
+})
+
+
 })();
 
 /******/ })()

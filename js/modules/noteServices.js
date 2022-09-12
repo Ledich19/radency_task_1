@@ -1,4 +1,4 @@
-let notes = require('./../dataNotes')
+let notes = require('../dataNotes')
 
 const getNotes = () => {
   return notes

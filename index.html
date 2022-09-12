@@ -15,7 +15,7 @@
 
 
   </table>
-  <button class="create-note">create note</button>
+  <button id="create-note">create note</button>
   <button class="toggle-archive">show archive</button>
   <table class="table-info">
 
@@ -23,24 +23,24 @@
 
   </table>
 
-  <form id="note-form" method="post" action="#">
+  <form id="note-form" method="post" action="#" class="hide">
     <span>Name: </span>
     <input type="text" id="name-note" name="name">
-
     <span>Category: </span>
     <select class="note-form__category" id="name" name="category" value="Random Thought">
       <option value="Random Thought">Random Thought</option>
       <option value="Idea">Idea</option>
       <option value="Task">Task</option>
     </select>
-
     <span>Date: </span>
     <input type="date" name="date">
-
     <span>Note: </span>
-   <textarea type="text" name="content"></textarea> -->
-    <button type="submit">save</button>
+   <textarea type="text" name="content"></textarea>
+   <button id="close-form" type="button">close</button>
   </form>
+
+  <button type="button" class="hide" id="save-note">save</button>
+  <button type="button" class="hide" id="update-note">update</button>
 
 </body>
 <script src="./js/js.bundle.js"></script>

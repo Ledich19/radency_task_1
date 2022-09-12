@@ -1,5 +1,6 @@
-const note = [
+const notes = [
   {
+    "id": "1111111",
     "name": "Dianna Rose",
     "createAt": "2022-06-11T09:38:49 -03:00",
     "category": "Random Thought",
@@ -11,6 +12,7 @@ const note = [
     "isArchive": true
   },
   {
+    "id": "222222",
     "name": "Catalina Horton",
     "createAt": "2015-07-27T10:52:10 -03:00",
     "category": "Random Thought",
@@ -21,6 +23,7 @@ const note = [
     "isArchive": false
   },
   {
+    "id": "333333",
     "name": "Jimenez Solis",
     "createAt": "2018-09-18T08:44:24 -03:00",
     "category": "Task",
@@ -31,6 +34,7 @@ const note = [
     "isArchive": false
   },
   {
+    "id": "4444444",
     "name": "Cole Davenport",
     "createAt": "2015-01-12T05:42:23 -03:00",
     "category": "Idea",
@@ -42,6 +46,7 @@ const note = [
     "isArchive": false
   },
   {
+    "id": "555555",
     "name": "Petty House",
     "createAt": "2018-03-15T03:43:09 -03:00",
     "category": "Idea",
@@ -54,6 +59,7 @@ const note = [
     "isArchive": false
   },
   {
+    "id": "666666",
     "name": "Winifred Holt",
     "createAt": "2014-04-10T03:54:01 -04:00",
     "category": "Idea",
@@ -65,6 +71,7 @@ const note = [
     "isArchive": true
   },
   {
+    "id": "777777",
     "name": "Holloway Barrett",
     "createAt": "2022-05-16T03:56:04 -03:00",
     "category": "Random Thought",
@@ -76,6 +83,7 @@ const note = [
     "isArchive": false
   },
   {
+    "id": "888888",
     "name": "Cervantes Hardin",
     "createAt": "2014-02-07T10:14:14 -04:00",
     "category": "Task",
@@ -87,6 +95,7 @@ const note = [
     "isArchive": true
   },
   {
+    "id": "999999",
     "name": "Vaughn Yates",
     "createAt": "2018-11-14T11:54:01 -03:00",
     "category": "Task",
@@ -97,6 +106,7 @@ const note = [
     "isArchive": true
   },
   {
+    "id": "1010101010101",
     "name": "Briana Diaz",
     "createAt": "2020-11-13T09:41:41 -03:00",
     "category": "Idea",
@@ -107,3 +117,5 @@ const note = [
     "isArchive": true
   }
 ]
+
+module.exports = notes

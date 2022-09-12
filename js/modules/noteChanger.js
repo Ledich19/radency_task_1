@@ -4,6 +4,10 @@ const getNotes = () => {
   return notes
 }
 
+const addNote = (note) => {
+  notes = notes.concat(note)
+}
+
 const deleteNote = (id) => {
   console. log(id)
   notes = notes.filter((n) => n.id !== id )
@@ -35,5 +39,6 @@ module.exports = {
   archiveNote,
   updateNote,
   deleteNoteAll,
-  archiveNoteAll
+  archiveNoteAll,
+  addNote
 }

@@ -11,59 +11,59 @@ const notes = [
   {
     "id": "1111111",
     "name": "Dianna Rose",
-    "createAt": "2022-06-11T09:38:49 -03:00",
+    "createAt": "2022-06-11T09:38:49",
     "category": "Random Thought",
     "content": "Consequat pariatur ullamco velit est deserunt reprehenderit sit irure magna.",
     "date": [
-      "2018-06-09T10:20:01 -03:00",
-      "2020-01-17T05:50:27 -03:00"
+      "2018-06-09",
+      "2020-01-17"
     ],
     "isArchive": true
   },
   {
     "id": "222222",
     "name": "Catalina Horton",
-    "createAt": "2015-07-27T10:52:10 -03:00",
+    "createAt": "2015-07-27T10:52:10",
     "category": "Random Thought",
     "content": "Adipisicing adipisicing nisi ut et qui nostrud.",
     "date": [
-      "2020-08-18T02:32:47 -03:00",
+      "2020-08-18",
     ],
     "isArchive": false
   },
   {
     "id": "333333",
     "name": "Jimenez Solis",
-    "createAt": "2018-09-18T08:44:24 -03:00",
+    "createAt": "2018-09-18T08:44:24",
     "category": "Task",
     "content": "In Lorem consequat excepteur consequat sint nisi.",
     "date": [
-      "2019-10-04T10:38:45 -03:00"
+      "2019-10-04"
     ],
     "isArchive": false
   },
   {
     "id": "4444444",
     "name": "Cole Davenport",
-    "createAt": "2015-01-12T05:42:23 -03:00",
+    "createAt": "2015-01-12T05:42:23",
     "category": "Idea",
     "content": "Proident Lorem in nulla nisi sunt veniam eiusmod fugiat enim sit.",
     "date": [
-      "2017-04-07T03:05:57 -03:00",
-      "2017-12-23T06:00:03 -03:00"
+      "2017-04-07",
+      "2017-12-23"
     ],
     "isArchive": false
   },
   {
     "id": "555555",
     "name": "Petty House",
-    "createAt": "2018-03-15T03:43:09 -03:00",
+    "createAt": "2018-03-15T03:43:09",
     "category": "Idea",
     "content": "Lorem veniam tempor consequat dolor proident mollit culpa dolor eiusmod eiusmod magna.",
     "date": [
-      "2021-05-18T08:10:35 -03:00",
-      "2015-10-22T03:43:06 -03:00",
-      "2018-11-11T12:26:48 -03:00"
+      "2021-05-18",
+      "2015-10-22",
+      "2018-11-11"
     ],
     "isArchive": false
   },
@@ -74,31 +74,31 @@ const notes = [
     "category": "Idea",
     "content": "Occaecat quis dolor do culpa.",
     "date": [
-      "2022-01-27T04:37:53 -03:00",
-      "2022-07-24T10:37:11 -03:00"
+      "2022-01-27",
+      "2022-07-24"
     ],
     "isArchive": true
   },
   {
     "id": "777777",
     "name": "Holloway Barrett",
-    "createAt": "2022-05-16T03:56:04 -03:00",
+    "createAt": "2022-05-16T03:56:04",
     "category": "Random Thought",
     "content": "Officia deserunt enim sit id quis laborum ipsum dolor aute irure.",
     "date": [
-      "2019-12-01T02:35:36 -03:00",
-      "2018-03-11T02:04:29 -03:00"
+      "2019-12-01",
+      "2018-03-11"
     ],
     "isArchive": false
   },
   {
     "id": "888888",
     "name": "Cervantes Hardin",
-    "createAt": "2014-02-07T10:14:14 -04:00",
+    "createAt": "2014-02-07T10:14:14",
     "category": "Task",
     "content": "Cillum elit ullamco aliqua ad labore sit qui incididunt est.",
     "date": [
-      "2022-08-01T03:51:13 -03:00"
+      "2022-08-01"
       
     ],
     "isArchive": true
@@ -106,22 +106,22 @@ const notes = [
   {
     "id": "999999",
     "name": "Vaughn Yates",
-    "createAt": "2018-11-14T11:54:01 -03:00",
+    "createAt": "2018-11-14T11:54:01",
     "category": "Task",
     "content": "Labore cupidatat tempor est qui culpa nisi aute ad elit.",
     "date": [
-      "2022-08-10T09:50:52 -03:00"
+      "2022-08-10"
     ],
     "isArchive": true
   },
   {
     "id": "1010101010101",
     "name": "Briana Diaz",
-    "createAt": "2020-11-13T09:41:41 -03:00",
+    "createAt": "2020-11-13T09:41:41",
     "category": "Idea",
     "content": "Ad nisi in reprehenderit nisi minim enim in do qui mollit ea et ut.",
     "date": [
-      "2017-02-08T01:10:55 -03:00"
+      "2017-02-08"
     ],
     "isArchive": true
   }
@@ -137,14 +137,22 @@ module.exports = notes
   \*************************************/
 /***/ ((module) => {
 
-const tableRow = () => {
+const tableRow = (n) => {
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+  const dates = n.date.map(d => d.replaceAll('-','/') )
+  const createDate = new Date(n.createAt).toLocaleString("en-US", options)
+
   const tr = document.createElement('tr')
         tr.className = "table__roe row"
         tr.innerHTML = `<td class="row__name">${n.name}</td>
-                        <td class="row__created">${n.createAt}</td>
+                        <td class="row__created">${createDate}</td>
                         <td class="row__category">${n.category}</td>
                         <td class="row__content">${n.content}</td>
-                        <td class="row__dates">${n.date}</td>
+                        <td class="row__dates">${dates}</td>
                         <td id=${n.id} class="row__buttons">
                           <button data-archive class="row__arh">A</button>
                           <button data-delete class="row__del">D</button>
@@ -177,6 +185,22 @@ module.exports = createElement
 
 /***/ }),
 
+/***/ "./js/modules/helper.js":
+/*!******************************!*\
+  !*** ./js/modules/helper.js ***!
+  \******************************/
+/***/ ((module) => {
+
+const generateId = () => {
+  return (Math.floor(Math.random() * (1000000 - 1 + 1)) + 1).toString() ;
+}
+
+module.exports = {
+  generateId, 
+}
+
+/***/ }),
+
 /***/ "./js/modules/noteChanger.js":
 /*!***********************************!*\
   !*** ./js/modules/noteChanger.js ***!
@@ -187,6 +211,10 @@ let notes = __webpack_require__(/*! ./../dataNotes */ "./js/dataNotes.js")
 
 const getNotes = () => {
   return notes
+}
+
+const addNote = (note) => {
+  notes = notes.concat(note)
 }
 
 const deleteNote = (id) => {
@@ -220,7 +248,8 @@ module.exports = {
   archiveNote,
   updateNote,
   deleteNoteAll,
-  archiveNoteAll
+  archiveNoteAll,
+  addNote
 }
 
 /***/ })
@@ -258,8 +287,10 @@ var __webpack_exports__ = {};
 /*!**********************!*\
   !*** ./js/script.js ***!
   \**********************/
-
 let createElement = __webpack_require__(/*! ./modules/createElement */ "./js/modules/createElement.js")
+const {
+  generateId
+} = __webpack_require__(/*! ./modules/helper */ "./js/modules/helper.js")
 let noteChanger = __webpack_require__(/*! ./modules/noteChanger */ "./js/modules/noteChanger.js")
 
 const table = document.querySelector('.table-main')
@@ -268,9 +299,9 @@ let showArchive = false
 const renderTable = () => {
   let showNotes = noteChanger.getNotes().filter((n) => n.isArchive === showArchive)
   table.innerHTML = createElement.tableHeader()
-  for ( n of showNotes) {
+  for (n of showNotes) {
     const tr = createElement.tableRow(n)
-    table.insertAdjacentElement('beforeend', tr )
+    table.insertAdjacentElement('beforeend', tr)
   }
 }
 renderTable()
@@ -287,23 +318,36 @@ toggleShowArchive()
 
 table.addEventListener('click', (event) => {
   const id = event.target.parentNode.id
-  if(event.target.hasAttribute('data-update')){
+  if (event.target.hasAttribute('data-update')) {
     noteChanger.updateNote(id)
     renderTable()
   }
-  if(event.target.hasAttribute('data-archive')){
+  if (event.target.hasAttribute('data-archive')) {
     noteChanger.archiveNote(id)
     renderTable()
   }
-  if(event.target.hasAttribute('data-delete')){
+  if (event.target.hasAttribute('data-delete')) {
     noteChanger.deleteNote(id)
     renderTable()
   }
 });
 
-
-
-
+const notaForm = document.querySelector('#note-form')
+notaForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const formData = new FormData(notaForm)
+  const note = {
+    id: generateId(),
+    name: formData.get('name'),
+    createAt: new Date(),
+    category: formData.get('category'),
+    content: formData.get('content'),
+    date: [formData.get('date')],
+    isArchive: false
+  }
+  noteChanger.addNote(note)
+  renderTable()
+})
 })();
 
 /******/ })()

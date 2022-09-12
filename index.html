@@ -22,15 +22,24 @@
 
 
   </table>
-  <form class="note-form">
-    <span>Name: </span><input type="text" name="name">
-    <span>Category: </span><select name="note-form__category" name="category">
+
+  <form id="note-form" method="post" action="#">
+    <span>Name: </span>
+    <input type="text" id="name-note" name="name">
+
+    <span>Category: </span>
+    <select class="note-form__category" id="name" name="category" value="Random Thought">
       <option value="Random Thought">Random Thought</option>
       <option value="Idea">Idea</option>
       <option value="Task">Task</option>
     </select>
-    <span>Date: </span><input type="date" name="dates">
-    <span>Note: </span><textarea type="text" name="name"></textarea>
+
+    <span>Date: </span>
+    <input type="date" name="date">
+
+    <span>Note: </span>
+   <textarea type="text" name="content"></textarea> -->
+    <button type="submit">save</button>
   </form>
 
 </body>

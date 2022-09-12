@@ -1,11 +1,19 @@
-const tableRow = () => {
+const tableRow = (n) => {
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+  const dates = n.date.map(d => d.replaceAll('-','/') )
+  const createDate = new Date(n.createAt).toLocaleString("en-US", options)
+
   const tr = document.createElement('tr')
         tr.className = "table__roe row"
         tr.innerHTML = `<td class="row__name">${n.name}</td>
-                        <td class="row__created">${n.createAt}</td>
+                        <td class="row__created">${createDate}</td>
                         <td class="row__category">${n.category}</td>
                         <td class="row__content">${n.content}</td>
-                        <td class="row__dates">${n.date}</td>
+                        <td class="row__dates">${dates}</td>
                         <td id=${n.id} class="row__buttons">
                           <button data-archive class="row__arh">A</button>
                           <button data-delete class="row__del">D</button>

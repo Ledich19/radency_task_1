@@ -3,11 +3,11 @@ const tableRow = (n) => {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-  };
+  }
   const dates = n.date.map(d => d.replaceAll('-', '/'))
-  const createDate = new Date(n.createAt).toLocaleString("en-US", options)
+  const createDate = new Date(n.createAt).toLocaleString('en-US', options)
   const tr = document.createElement('div')
-  tr.className = "table-main__row row"
+  tr.className = 'table-main__row row'
   tr.innerHTML = `
   <div class="table-main__name">${n.name}</div>
   <div class="table-main__created">${createDate}</div>
@@ -37,21 +37,21 @@ const tableHeader = () => {
 }
 
 const tableInfoHeader = () => {
-  return `<tr class="table-info__head ">
-  <th class="table-info__title">Category</th>
-  <th class="table-info__title">active</th>
-  <th class="table-info__title">archived</th>
-  </tr>`
+  return `<div class="table-info__head table-info__row table-head row">
+  <div class="table-info__title">Category</div>
+  <div class="table-info__title">active</div>
+  <div class="table-info__title">archived</div>
+  </div>`
 }
 
 const tableInfoRow = (n) => {
   const tr = document.createElement('tr')
-  tr.className = "able-info__roe row"
+  tr.className = 'table-info__row row'
   tr.innerHTML = `
-        <td class="able-info__category">${n.category}</td>
-        <td class="able-info__active">${n.all - n.archive}</td>
-        <td class="able-info__archived">${n.archive}</td>
-        </td>`
+        <div class="able-info__category">${n.category}</div>
+        <div class="able-info__active">${n.all - n.archive}</div>
+        <div class="able-info__archived">${n.archive}</div>
+        </div>`
   return tr
 }
 

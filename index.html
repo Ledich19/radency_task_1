@@ -11,18 +11,15 @@
 
 <body>
   <div class="container">
-    <div class="table-main">
-    </div>
+    <div class="table-main"></div>
 
     <button id="create-note">create note</button>
-    <button class="toggle-archive">show archive</button>
-    <table class="table-info">
-  
-  
-  
-    </table>
-  
-    <form id="note-form" method="post" action="#" class="hide">
+    <button id="toggle-archive">show archive</button>
+
+    <table class="table-info"></table>
+
+  <div class="form-wrapper hide">
+    <form id="note-form" method="post" action="#">
       <span>Name: </span>
       <input type="text" id="note-form-name" name="name">
       <span>Category: </span>
@@ -37,10 +34,10 @@
      <textarea name="content" id="note-form-content"></textarea>
      <button id="close-form" type="button">close</button>
      <input type="hidden" name="id" id="note-form-id">
+     <button type="button" class="hide" id="save-note">save</button>
+     <button type="button" class="hide" id="update-note">update</button>
     </form>
-  
-    <button type="button" class="hide" id="save-note">save</button>
-    <button type="button" class="hide" id="update-note">update</button>
+  </div>
   </div>
 
 </body>

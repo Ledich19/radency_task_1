@@ -1,16 +1,16 @@
 
 const {
   getNotesStore
-} = require("../store")
+} = require('../store')
 const {
   tableHeader,
   tableInfoHeader,
   tableInfoRow,
   tableRow
-} = require("./createElement")
+} = require('./createElement')
 
 const table = document.querySelector('.table-main')
-const toggleBtn = document.querySelector('.toggle-archive')
+const toggleBtn = document.querySelector('#toggle-archive')
 
 let showArchive = false
 
@@ -18,12 +18,11 @@ const renderTable = () => {
 
   let showNotes = getNotesStore().filter((n) => n.isArchive === showArchive)
   table.innerHTML = tableHeader()
-  
+
   for (const note of showNotes) {
     const tr = tableRow(note)
     table.insertAdjacentElement('beforeend', tr)
   }
-  
 }
 
 const tableInfo = document.querySelector('.table-info')
@@ -51,7 +50,7 @@ const renderTableInfo = () => {
       countNotes.push(newObject)
     }
   }
-  
+
   for (const category of countNotes) {
     const tr = tableInfoRow(category)
     tableInfo.insertAdjacentElement('beforeend', tr)
@@ -64,6 +63,6 @@ toggleBtn.addEventListener('click', (e) => {
   showArchive = !showArchive
   e.target.innerHTML = showArchive ? 'show notes' : 'show archive'
   renderTable()
-});
+})
 
-module.exports = {renderTable, renderTableInfo}
+module.exports = { renderTable, renderTableInfo }

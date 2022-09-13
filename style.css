@@ -1,3 +1,35 @@
+@charset "UTF-8";
+/*Обнуление*/
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+:focus, :active {
+  outline: none;
+}
+
+a:focus, a:active {
+  outline: none;
+}
+
+nav, footer, header, aside {
+  display: block;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  line-height: 1;
+  font-size: 16px;
+}
+
 .hide {
   display: none;
 }
@@ -7,11 +39,13 @@
 }
 
 .container {
+  position: relative;
   max-width: 1300px;
   margin: 0 auto;
 }
 
-.table-main {
+.table-main,
+.table-info {
   width: 100%;
 }
 
@@ -20,7 +54,7 @@
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  background-color: rgb(191, 191, 191);
+  background-color: rgb(172, 169, 169);
   border-radius: 5px;
   width: 100%;
 }
@@ -63,4 +97,48 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.table-info__row {
+  justify-content: space-around;
+}
+.table-info__row > div {
+  display: flex;
+  width: 33%;
+  justify-content: center;
+}
+
+.form-wrapper {
+  top: 0;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.751);
+  height: 100%;
+  width: 100%;
+}
+
+#note-form {
+  padding: 5px;
+  background: rgb(182, 182, 182);
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+#note-form-content {
+  resize: none;
+  height: 50px;
+}
+
+#close-form, #save-note, #update-note, #create-note, #toggle-archive {
+  background: rgb(126, 124, 124);
+  border-radius: 3px;
+  padding: 3px;
+  margin-top: 5px;
+}
+
+.table-main__arh, .table-main__del, .table-main__upd, #table__arhAll, #table__delAll {
+  padding: 3px;
+  margin-left: 3px;
+  border-radius: 3px;
 }/*# sourceMappingURL=style.css.map */

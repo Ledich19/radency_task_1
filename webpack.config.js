@@ -1,10 +1,9 @@
-'use strict';
-
-let path = require('path');
+'use strict'
+let path = require('path')
 
 module.exports = {
   mode: 'development',
-  entry: './js/script.js',
+  entry: './js/index.js',
   output: {
     filename: 'js.bundle.js',
     path: __dirname + '/js',

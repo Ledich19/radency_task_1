@@ -2,20 +2,20 @@ const {
   hiddenElement,
   showElement,
   generateId
-} = require("./helper")
+} = require('./helper')
 const {
   renderTable,
   renderTableInfo
-} = require("./renderTable")
+} = require('./renderTable')
 const noteServices = require('./../services/noteServices')
 const {
   setNotesToStore
-} = require("../store")
+} = require('../store')
 
 const saveNoteBtn = document.querySelector('#save-note')
 const closeFormBtn = document.querySelector('#close-form')
 const createNoteBtn = document.querySelector('#create-note')
-const notaForm = document.querySelector('#note-form')
+const notaForm = document.querySelector('.form-wrapper')
 const updateFormBtn = document.querySelector('#update-note')
 
 const noteForm = () => {
@@ -48,6 +48,12 @@ const noteForm = () => {
     return note
   }
 
+  const closeAll = () => {
+    hiddenElement(saveNoteBtn)
+    hiddenElement(updateFormBtn)
+    hiddenElement(notaForm)
+  }
+
   const saveNoteHandler = async (e) => {
     e.preventDefault()
     try {
@@ -56,15 +62,14 @@ const noteForm = () => {
       setNotesToStore(response)
       renderTable()
       renderTableInfo()
+      closeAll()
     } catch (err) {
-      alert(err);
+      alert(err)
     }
   }
   const closeFormHandler = (e) => {
     e.preventDefault()
-    hiddenElement(saveNoteBtn)
-    hiddenElement(updateFormBtn)
-    hiddenElement(notaForm)
+    closeAll()
   }
   const updateFormHandler = async (e) => {
     e.preventDefault()
@@ -74,13 +79,14 @@ const noteForm = () => {
       setNotesToStore(response)
       renderTable()
       renderTableInfo()
+      closeAll()
     } catch (err) {
-      alert(err);
+      alert(err)
     }
   }
   const createNoteHandler = (e) => {
     e.preventDefault()
-    hiddenElement(updateFormBtn)
+    closeAll()
     showElement(saveNoteBtn)
     document.getElementById('note-form-name').value = ''
     document.getElementById('note-form-category').value = 'Random Thought'

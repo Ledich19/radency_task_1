@@ -3,23 +3,24 @@ const {
   updateNote,
   deleteNoteAll,
   updateAll
-} = require("../services/noteServices")
+} = require('../services/noteServices')
 const {
   getNoteById,
   setNotesToStore
-} = require("../store")
+} = require('../store')
 const {
   showElement,
   hiddenElement
-} = require("./helper")
+} = require('./helper')
 const {
   renderTable,
   renderTableInfo
-} = require("./renderTable")
+} = require('./renderTable')
 
 const table = document.querySelector('.table-main')
 const saveNoteBtn = document.querySelector('#save-note')
-const notaForm = document.querySelector('#note-form')
+const notaForm = document.querySelector('.form-wrapper')
+
 const updateFormBtn = document.querySelector('#update-note')
 
 const tableFoo = () => {
@@ -41,7 +42,7 @@ const tableFoo = () => {
     if (e.target.hasAttribute('data-archive-all')) {
       archiveAllHandler()
     }
-  });
+  })
 }
 
 const deleteHandler = async (id) => {
@@ -51,7 +52,7 @@ const deleteHandler = async (id) => {
     renderTable()
     renderTableInfo()
   } catch (err) {
-    alert(err);
+    alert(err)
   }
 }
 
@@ -79,7 +80,7 @@ const archiveHandler = async (id) => {
     renderTable()
     renderTableInfo()
   } catch (err) {
-    alert(err);
+    alert(err)
   }
 }
 
@@ -92,20 +93,20 @@ const archiveAllHandler = async () => {
     renderTable()
     renderTableInfo()
   } catch (err) {
-    alert(err);
+    alert(err)
   }
 }
 
 const deleteAllHandler = async () => {
-  const ask = confirm("you want to delete everything ?")
+  const ask = confirm('you want to delete everything ?')
   if (ask) {
-  try {
+    try {
       let response = await deleteNoteAll()
       setNotesToStore(response)
       renderTable()
       renderTableInfo()
     } catch (err) {
-      alert(err);
+      alert(err)
     }
   }
 }

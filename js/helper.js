@@ -10,7 +10,7 @@ const hiddenElement = (e) => {
   e.classList.remove('show')
 }
 
-const countNotes = (showCategories) => {
+const countNotesFoo = (showCategories) => {
   let countNotes = []
   for (const note of showCategories) {
     const checkCategory = countNotes.find((n) => n.category === note.category)
@@ -30,11 +30,12 @@ const countNotes = (showCategories) => {
       countNotes.push(newObject)
     }
   }
+  return countNotes
 }
 
 module.exports = {
   generateId,
   showElement,
   hiddenElement,
-  countNotes
+  countNotesFoo
 }

@@ -149,10 +149,34 @@ const hiddenElement = (e) => {
   e.classList.remove('show')
 }
 
+const countNotesFoo = (showCategories) => {
+  let countNotes = []
+  for (const note of showCategories) {
+    const checkCategory = countNotes.find((n) => n.category === note.category)
+    if (checkCategory) {
+      const newObject = {
+        category: checkCategory.category,
+        all: checkCategory.all + 1,
+        archive: note.isArchive ? checkCategory.archive +1 : checkCategory.archive
+      }
+      countNotes = countNotes.map((c) => c.category ===  newObject.category ? newObject : c)
+    } else {
+      const newObject = {
+        category: note.category,
+        all: 1,
+        archive: note.isArchive ? 1 : 0
+      }
+      countNotes.push(newObject)
+    }
+  }
+  return countNotes
+}
+
 module.exports = {
   generateId,
   showElement,
-  hiddenElement
+  hiddenElement,
+  countNotesFoo
 }
 
 /***/ }),
@@ -229,6 +253,41 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./js/modules/createNoteBtn.js":
+/*!*************************************!*\
+  !*** ./js/modules/createNoteBtn.js ***!
+  \*************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const { hiddenElement, showElement } = __webpack_require__(/*! ../helper */ "./js/helper.js")
+const saveNoteBtn = document.querySelector('#save-note')
+const notaForm = document.querySelector('.form-wrapper')
+const updateFormBtn = document.querySelector('#update-note')
+
+const createNoteBtn = () => {
+  const toggleBtn = document.createElement('button')
+  toggleBtn.id = 'create-note'
+  toggleBtn.innerHTML = 'create note'
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    hiddenElement(saveNoteBtn)
+    hiddenElement(updateFormBtn)
+    hiddenElement(notaForm)
+    showElement(saveNoteBtn)
+    document.getElementById('note-form-name').value = ''
+    document.getElementById('note-form-category').value = 'Random Thought'
+    document.getElementById('note-form-date').value = ''
+    document.getElementById('note-form-content').value = ''
+    showElement(notaForm)
+  })
+  return toggleBtn
+}
+
+module.exports = createNoteBtn
+
+/***/ }),
+
 /***/ "./js/modules/noteForm.js":
 /*!********************************!*\
   !*** ./js/modules/noteForm.js ***!
@@ -264,9 +323,6 @@ const noteForm = () => {
   })
   updateFormBtn.addEventListener('click', (e) => {
     updateFormHandler(e)
-  })
-  createNoteBtn.addEventListener('click', (e) => {
-    createNoteHandler(e)
   })
 
   const getDataForm = () => {
@@ -318,16 +374,6 @@ const noteForm = () => {
       alert(err)
     }
   }
-  const createNoteHandler = (e) => {
-    e.preventDefault()
-    closeAll()
-    showElement(saveNoteBtn)
-    document.getElementById('note-form-name').value = ''
-    document.getElementById('note-form-category').value = 'Random Thought'
-    document.getElementById('note-form-date').value = ''
-    document.getElementById('note-form-content').value = ''
-    showElement(notaForm)
-  }
 }
 
 module.exports = noteForm
@@ -340,9 +386,9 @@ module.exports = noteForm
   \***********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-
+const { countNotesFoo } = __webpack_require__(/*! ../helper */ "./js/helper.js")
 const {
-  getNotesStore
+  getNotesStore, getShowArchive
 } = __webpack_require__(/*! ../store */ "./js/store.js")
 const {
   tableHeader,
@@ -352,13 +398,10 @@ const {
 } = __webpack_require__(/*! ./createElement */ "./js/modules/createElement.js")
 
 const table = document.querySelector('.table-main')
-const toggleBtn = document.querySelector('#toggle-archive')
 const tableInfo = document.querySelector('.table-info')
 
-let showArchive = false
-
 const renderTable = () => {
-  let showNotes = getNotesStore().filter((n) => n.isArchive === showArchive)
+  let showNotes = getNotesStore()
   table.innerHTML = tableHeader()
   for (const note of showNotes) {
     const tr = tableRow(note)
@@ -369,37 +412,12 @@ const renderTable = () => {
 const renderTableInfo = () => {
   let showCategories = getNotesStore()
   tableInfo.innerHTML = tableInfoHeader()
-  let countNotes = []
-  for (const note of showCategories) {
-    const checkCategory = countNotes.find((n) => n.category === note.category)
-    if (checkCategory) {
-      const newObject = {
-        category: checkCategory.category,
-        all: checkCategory.all + 1,
-        archive: note.isArchive ? checkCategory.archive +1 : checkCategory.archive
-      }
-      countNotes = countNotes.map((c) => c.category ===  newObject.category ? newObject : c)
-    } else {
-      const newObject = {
-        category: note.category,
-        all: 1,
-        archive: note.isArchive ? 1 : 0
-      }
-      countNotes.push(newObject)
-    }
-  }
+  const countNotes = countNotesFoo(showCategories)
   for (const category of countNotes) {
     const tr = tableInfoRow(category)
     tableInfo.insertAdjacentElement('beforeend', tr)
   }
 }
-
-toggleBtn.addEventListener('click', (e) => {
-  e.preventDefault()
-  showArchive = !showArchive
-  e.target.innerHTML = showArchive ? 'show notes' : 'show archive'
-  renderTable()
-})
 
 module.exports = { renderTable, renderTableInfo }
 
@@ -528,6 +546,38 @@ module.exports = tableFoo
 
 /***/ }),
 
+/***/ "./js/modules/toggleArchiveBtn.js":
+/*!****************************************!*\
+  !*** ./js/modules/toggleArchiveBtn.js ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const {
+  toggleShowArchive,
+  getShowArchive
+} = __webpack_require__(/*! ../store */ "./js/store.js")
+const {
+  renderTable
+} = __webpack_require__(/*! ./renderTable */ "./js/modules/renderTable.js")
+
+const toggleArchiveBtn = () => {
+  const toggleBtn = document.createElement('button')
+  toggleBtn.id = 'toggle-archive'
+  toggleBtn.innerHTML = 'show archive'
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    toggleShowArchive()
+    e.target.innerHTML = getShowArchive() ? 'show notes' : 'show archive'
+    renderTable()
+  })
+  return toggleBtn
+}
+
+module.exports = toggleArchiveBtn
+
+/***/ }),
+
 /***/ "./js/services/noteServices.js":
 /*!*************************************!*\
   !*** ./js/services/noteServices.js ***!
@@ -584,9 +634,10 @@ module.exports = {
 
 
 let notes = []
+let showArchive = false
 
 const getNotesStore = () => {
-  return notes
+  return notes.filter((n) => n.isArchive === showArchive)
 }
 
 const setNotesToStore = (note) => {
@@ -597,10 +648,19 @@ const getNoteById = (id) => {
   return notes.find(n => n.id === id)
 }
 
+const toggleShowArchive = () => {
+  showArchive = !showArchive
+}
+const getShowArchive = () => {
+  return showArchive
+}
+
 module.exports = {
   getNotesStore,
   setNotesToStore,
-  getNoteById
+  getNoteById,
+  toggleShowArchive,
+  getShowArchive
 }
 
 
@@ -640,11 +700,14 @@ var __webpack_exports__ = {};
   !*** ./js/index.js ***!
   \*********************/
 let noteServices = __webpack_require__(/*! ./services/noteServices */ "./js/services/noteServices.js")
-
+const main = document.getElementById('main')
+const tableMain = document.querySelector('.table-main')
 const { setNotesToStore } = __webpack_require__(/*! ./store */ "./js/store.js")
 const { renderTable, renderTableInfo } = __webpack_require__(/*! ./modules/renderTable */ "./js/modules/renderTable.js")
 const tableFoo = __webpack_require__(/*! ./modules/table */ "./js/modules/table.js")
 const noteForm = __webpack_require__(/*! ./modules/noteForm */ "./js/modules/noteForm.js")
+const toggleArchiveBtn = __webpack_require__(/*! ./modules/toggleArchiveBtn */ "./js/modules/toggleArchiveBtn.js")
+const createNoteBtn = __webpack_require__(/*! ./modules/createNoteBtn */ "./js/modules/createNoteBtn.js")
 
 document.addEventListener('DOMContentLoaded', () => {
   async function start() {
@@ -660,6 +723,9 @@ document.addEventListener('DOMContentLoaded', () => {
   start()
   tableFoo()
   noteForm()
+
+  tableMain.insertAdjacentElement('afterend',createNoteBtn())
+  tableMain.insertAdjacentElement('afterend',toggleArchiveBtn())
 })
 
 

@@ -1,6 +1,5 @@
 const {
   hiddenElement,
-  showElement,
   generateId
 } = require('../helper')
 const {
@@ -14,7 +13,6 @@ const {
 
 const saveNoteBtn = document.querySelector('#save-note')
 const closeFormBtn = document.querySelector('#close-form')
-const createNoteBtn = document.querySelector('#create-note')
 const notaForm = document.querySelector('.form-wrapper')
 const updateFormBtn = document.querySelector('#update-note')
 
@@ -27,9 +25,6 @@ const noteForm = () => {
   })
   updateFormBtn.addEventListener('click', (e) => {
     updateFormHandler(e)
-  })
-  createNoteBtn.addEventListener('click', (e) => {
-    createNoteHandler(e)
   })
 
   const getDataForm = () => {
@@ -80,16 +75,6 @@ const noteForm = () => {
     } catch (err) {
       alert(err)
     }
-  }
-  const createNoteHandler = (e) => {
-    e.preventDefault()
-    closeAll()
-    showElement(saveNoteBtn)
-    document.getElementById('note-form-name').value = ''
-    document.getElementById('note-form-category').value = 'Random Thought'
-    document.getElementById('note-form-date').value = ''
-    document.getElementById('note-form-content').value = ''
-    showElement(notaForm)
   }
 }
 

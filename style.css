@@ -137,6 +137,10 @@ html, body {
   margin-top: 5px;
 }
 
+#create-note {
+  margin-left: 10px;
+}
+
 .table-main__arh, .table-main__del, .table-main__upd, #table__arhAll, #table__delAll {
   padding: 3px;
   margin-left: 3px;

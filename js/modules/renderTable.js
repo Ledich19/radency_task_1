@@ -27,25 +27,7 @@ const renderTable = () => {
 const renderTableInfo = () => {
   let showCategories = getNotesStore()
   tableInfo.innerHTML = tableInfoHeader()
-  let countNotes = []
-  for (const note of showCategories) {
-    const checkCategory = countNotes.find((n) => n.category === note.category)
-    if (checkCategory) {
-      const newObject = {
-        category: checkCategory.category,
-        all: checkCategory.all + 1,
-        archive: note.isArchive ? checkCategory.archive +1 : checkCategory.archive
-      }
-      countNotes = countNotes.map((c) => c.category ===  newObject.category ? newObject : c)
-    } else {
-      const newObject = {
-        category: note.category,
-        all: 1,
-        archive: note.isArchive ? 1 : 0
-      }
-      countNotes.push(newObject)
-    }
-  }
+  const countNotes = countNotes(showCategories)
   for (const category of countNotes) {
     const tr = tableInfoRow(category)
     tableInfo.insertAdjacentElement('beforeend', tr)

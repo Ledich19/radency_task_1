@@ -2,7 +2,7 @@ const {
   hiddenElement,
   showElement,
   generateId
-} = require('./helper')
+} = require('../helper')
 const {
   renderTable,
   renderTableInfo
@@ -44,16 +44,13 @@ const noteForm = () => {
       date: [formData.get('date')],
       isArchive: false
     }
-    console.log('id', note.id)
     return note
   }
-
   const closeAll = () => {
     hiddenElement(saveNoteBtn)
     hiddenElement(updateFormBtn)
     hiddenElement(notaForm)
   }
-
   const saveNoteHandler = async (e) => {
     e.preventDefault()
     try {

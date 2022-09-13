@@ -9,10 +9,6 @@ const setNotesToStore = (note) => {
   notes = note
 }
 
-const clearNotesStore = () => {
-  notes = []
-}
-
 const getNoteById = (id) => {
   return notes.find(n => n.id === id)
 }
@@ -20,6 +16,5 @@ const getNoteById = (id) => {
 module.exports = {
   getNotesStore,
   setNotesToStore,
-  clearNotesStore,
   getNoteById
 }

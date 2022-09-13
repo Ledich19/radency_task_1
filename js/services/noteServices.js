@@ -8,7 +8,10 @@ const deleteNote = (id) => {
   return notes
 }
 const updateNote = (note) => {
-  notes = notes.map((n) => n.id === note.id ? note : n)
+  notes = notes.map((n) => {
+    const dates = n.date.indexOf(...note.date) >= 0 ? n.date : n.date.concat(note.date)
+    return n.id === note.id ? { ...note, date: dates } : n
+  })
   return notes
 }
 const deleteNoteAll = () => {

@@ -11,7 +11,7 @@ const {
 const {
   showElement,
   hiddenElement
-} = require('./helper')
+} = require('../helper')
 const {
   renderTable,
   renderTableInfo

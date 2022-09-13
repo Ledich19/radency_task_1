@@ -70,7 +70,7 @@ const notes = [
   {
     "id": "666666",
     "name": "Winifred Holt",
-    "createAt": "2014-04-10T03:54:01 -04:00",
+    "createAt": "2014-04-10T03:54:01",
     "category": "Idea",
     "content": "Occaecat quis dolor do culpa.",
     "date": [
@@ -128,6 +128,32 @@ const notes = [
 ]
 
 module.exports = notes
+
+/***/ }),
+
+/***/ "./js/helper.js":
+/*!**********************!*\
+  !*** ./js/helper.js ***!
+  \**********************/
+/***/ ((module) => {
+
+const generateId = () => {
+  return (Math.floor(Math.random() * (1000000 - 1 + 1)) + 1).toString()
+}
+const showElement = (e) => {
+  e.classList.remove('hide')
+  e.classList.add('show')
+}
+const hiddenElement = (e) => {
+  e.classList.add('hide')
+  e.classList.remove('show')
+}
+
+module.exports = {
+  generateId,
+  showElement,
+  hiddenElement
+}
 
 /***/ }),
 
@@ -203,32 +229,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./js/modules/helper.js":
-/*!******************************!*\
-  !*** ./js/modules/helper.js ***!
-  \******************************/
-/***/ ((module) => {
-
-const generateId = () => {
-  return (Math.floor(Math.random() * (1000000 - 1 + 1)) + 1).toString()
-}
-const showElement = (e) => {
-  e.classList.remove('hide')
-  e.classList.add('show')
-}
-const hiddenElement = (e) => {
-  e.classList.add('hide')
-  e.classList.remove('show')
-}
-
-module.exports = {
-  generateId,
-  showElement,
-  hiddenElement
-}
-
-/***/ }),
-
 /***/ "./js/modules/noteForm.js":
 /*!********************************!*\
   !*** ./js/modules/noteForm.js ***!
@@ -239,7 +239,7 @@ const {
   hiddenElement,
   showElement,
   generateId
-} = __webpack_require__(/*! ./helper */ "./js/modules/helper.js")
+} = __webpack_require__(/*! ../helper */ "./js/helper.js")
 const {
   renderTable,
   renderTableInfo
@@ -281,16 +281,13 @@ const noteForm = () => {
       date: [formData.get('date')],
       isArchive: false
     }
-    console.log('id', note.id)
     return note
   }
-
   const closeAll = () => {
     hiddenElement(saveNoteBtn)
     hiddenElement(updateFormBtn)
     hiddenElement(notaForm)
   }
-
   const saveNoteHandler = async (e) => {
     e.preventDefault()
     try {
@@ -356,29 +353,25 @@ const {
 
 const table = document.querySelector('.table-main')
 const toggleBtn = document.querySelector('#toggle-archive')
+const tableInfo = document.querySelector('.table-info')
 
 let showArchive = false
 
 const renderTable = () => {
-
   let showNotes = getNotesStore().filter((n) => n.isArchive === showArchive)
   table.innerHTML = tableHeader()
-
   for (const note of showNotes) {
     const tr = tableRow(note)
     table.insertAdjacentElement('beforeend', tr)
   }
 }
 
-const tableInfo = document.querySelector('.table-info')
 const renderTableInfo = () => {
   let showCategories = getNotesStore()
   tableInfo.innerHTML = tableInfoHeader()
   let countNotes = []
-
   for (const note of showCategories) {
     const checkCategory = countNotes.find((n) => n.category === note.category)
-    console.log('checkCategory',checkCategory)
     if (checkCategory) {
       const newObject = {
         category: checkCategory.category,
@@ -395,13 +388,11 @@ const renderTableInfo = () => {
       countNotes.push(newObject)
     }
   }
-
   for (const category of countNotes) {
     const tr = tableInfoRow(category)
     tableInfo.insertAdjacentElement('beforeend', tr)
   }
 }
-renderTableInfo()
 
 toggleBtn.addEventListener('click', (e) => {
   e.preventDefault()
@@ -433,7 +424,7 @@ const {
 const {
   showElement,
   hiddenElement
-} = __webpack_require__(/*! ./helper */ "./js/modules/helper.js")
+} = __webpack_require__(/*! ../helper */ "./js/helper.js")
 const {
   renderTable,
   renderTableInfo
@@ -553,7 +544,10 @@ const deleteNote = (id) => {
   return notes
 }
 const updateNote = (note) => {
-  notes = notes.map((n) => n.id === note.id ? note : n)
+  notes = notes.map((n) => {
+    const dates = n.date.indexOf(...note.date) >= 0 ? n.date : n.date.concat(note.date)
+    return n.id === note.id ? { ...note, date: dates } : n
+  })
   return notes
 }
 const deleteNoteAll = () => {
@@ -599,10 +593,6 @@ const setNotesToStore = (note) => {
   notes = note
 }
 
-const clearNotesStore = () => {
-  notes = []
-}
-
 const getNoteById = (id) => {
   return notes.find(n => n.id === id)
 }
@@ -610,7 +600,6 @@ const getNoteById = (id) => {
 module.exports = {
   getNotesStore,
   setNotesToStore,
-  clearNotesStore,
   getNoteById
 }
 

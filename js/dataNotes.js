@@ -61,7 +61,7 @@ const notes = [
   {
     "id": "666666",
     "name": "Winifred Holt",
-    "createAt": "2014-04-10T03:54:01 -04:00",
+    "createAt": "2014-04-10T03:54:01",
     "category": "Idea",
     "content": "Occaecat quis dolor do culpa.",
     "date": [

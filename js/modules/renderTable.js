@@ -11,29 +11,25 @@ const {
 
 const table = document.querySelector('.table-main')
 const toggleBtn = document.querySelector('#toggle-archive')
+const tableInfo = document.querySelector('.table-info')
 
 let showArchive = false
 
 const renderTable = () => {
-
   let showNotes = getNotesStore().filter((n) => n.isArchive === showArchive)
   table.innerHTML = tableHeader()
-
   for (const note of showNotes) {
     const tr = tableRow(note)
     table.insertAdjacentElement('beforeend', tr)
   }
 }
 
-const tableInfo = document.querySelector('.table-info')
 const renderTableInfo = () => {
   let showCategories = getNotesStore()
   tableInfo.innerHTML = tableInfoHeader()
   let countNotes = []
-
   for (const note of showCategories) {
     const checkCategory = countNotes.find((n) => n.category === note.category)
-    console.log('checkCategory',checkCategory)
     if (checkCategory) {
       const newObject = {
         category: checkCategory.category,
@@ -50,13 +46,11 @@ const renderTableInfo = () => {
       countNotes.push(newObject)
     }
   }
-
   for (const category of countNotes) {
     const tr = tableInfoRow(category)
     tableInfo.insertAdjacentElement('beforeend', tr)
   }
 }
-renderTableInfo()
 
 toggleBtn.addEventListener('click', (e) => {
   e.preventDefault()

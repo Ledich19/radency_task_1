@@ -143,45 +143,63 @@ const tableRow = (n) => {
     month: 'short',
     day: 'numeric',
   };
-  const dates = n.date.map(d => d.replaceAll('-','/') )
+  const dates = n.date.map(d => d.replaceAll('-', '/'))
   const createDate = new Date(n.createAt).toLocaleString("en-US", options)
-
-  const tr = document.createElement('tr')
-        tr.className = "table__roe row"
-        tr.innerHTML = `<td class="row__name">${n.name}</td>
-                        <td class="row__created">${createDate}</td>
-                        <td class="row__category">${n.category}</td>
-                        <td class="row__content">${n.content}</td>
-                        <td class="row__dates">${dates}</td>
-                        <td id=${n.id} class="row__buttons">
-                          <button data-archive class="row__arh">A</button>
-                          <button data-delete class="row__del">D</button>
-                          <button data-update class="row__upd">U</button>
-                        </td>`
+  const tr = document.createElement('div')
+  tr.className = "table-main__row row"
+  tr.innerHTML = `
+  <div class="table-main__name">${n.name}</div>
+  <div class="table-main__created">${createDate}</div>
+  <div class="table-main__category">${n.category}</div>
+  <div class="table-main__content">${n.content}</div>
+  <div class="table-main__dates">${dates}</div>
+  <div id=${n.id} class="table-main__buttons">
+    <button data-archive class="table-main__arh">A</button>
+    <button data-delete class="table-main__del">D</button>
+    <button data-update class="table-main__upd">U</button>
+  </div>`
   return tr
 }
 
 const tableHeader = () => {
-  return  `<tr class="table__roe row">
-  <th class="row__name">Name</th>
-  <th class="row__created">Created</th>
-  <th class="row__category">Categoryf</th>
-  <th class="row__content">Content</th>
-  <th class="row__dates"></th>
-  <th class="row__btns">
-    <button class="row__arh">A</button>
-    <button class="row__del">D</button>
-  </th>
+  return `<div class="table-head row">
+  <div class="table-head__name">Name</div>
+  <div class="table-head__created">Created</div>
+  <div class="table-head__category">Category</div>
+  <div class="table-head_content">Content</div>
+  <div class="table-head__dates">dates</div>
+  <div class="table-head__buttons">
+    <button data-archive-all id="table__arhAll">A</button>
+    <button data-delete-all id="table__delAll">D</button>
+  </div>
+  </div>`
+}
+
+const tableInfoHeader = () => {
+  return `<tr class="table-info__head ">
+  <th class="table-info__title">Category</th>
+  <th class="table-info__title">active</th>
+  <th class="table-info__title">archived</th>
   </tr>`
 }
 
-
-const createElement = {
-  tableRow,
-  tableHeader
+const tableInfoRow = (n) => {
+  const tr = document.createElement('tr')
+  tr.className = "able-info__roe row"
+  tr.innerHTML = `
+        <td class="able-info__category">${n.category}</td>
+        <td class="able-info__active">${n.all - n.archive}</td>
+        <td class="able-info__archived">${n.archive}</td>
+        </td>`
+  return tr
 }
 
-module.exports = createElement
+module.exports = {
+  tableHeader,
+  tableRow,
+  tableInfoHeader,
+  tableInfoRow
+}
 
 /***/ }),
 
@@ -210,10 +228,312 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./js/modules/noteServices.js":
-/*!************************************!*\
-  !*** ./js/modules/noteServices.js ***!
-  \************************************/
+/***/ "./js/modules/noteForm.js":
+/*!********************************!*\
+  !*** ./js/modules/noteForm.js ***!
+  \********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const {
+  hiddenElement,
+  showElement,
+  generateId
+} = __webpack_require__(/*! ./helper */ "./js/modules/helper.js")
+const {
+  renderTable,
+  renderTableInfo
+} = __webpack_require__(/*! ./renderTable */ "./js/modules/renderTable.js")
+const noteServices = __webpack_require__(/*! ./../services/noteServices */ "./js/services/noteServices.js")
+const {
+  setNotesToStore
+} = __webpack_require__(/*! ../store */ "./js/store.js")
+
+const saveNoteBtn = document.querySelector('#save-note')
+const closeFormBtn = document.querySelector('#close-form')
+const createNoteBtn = document.querySelector('#create-note')
+const notaForm = document.querySelector('#note-form')
+const updateFormBtn = document.querySelector('#update-note')
+
+const noteForm = () => {
+  saveNoteBtn.addEventListener('click', (e) => {
+    saveNoteHandler(e)
+  })
+  closeFormBtn.addEventListener('click', (e) => {
+    closeFormHandler(e)
+  })
+  updateFormBtn.addEventListener('click', (e) => {
+    updateFormHandler(e)
+  })
+  createNoteBtn.addEventListener('click', (e) => {
+    createNoteHandler(e)
+  })
+
+  const getDataForm = () => {
+    const notaForm = document.querySelector('#note-form')
+    const formData = new FormData(notaForm)
+    const note = {
+      id:  formData.get('id') ? formData.get('id') : generateId(),
+      name: formData.get('name'),
+      createAt: new Date(),
+      category: formData.get('category'),
+      content: formData.get('content'),
+      date: [formData.get('date')],
+      isArchive: false
+    }
+    console.log('id', note.id)
+    return note
+  }
+
+  const saveNoteHandler = async (e) => {
+    e.preventDefault()
+    try {
+      const data = getDataForm()
+      let response = await noteServices.addNote(data)
+      setNotesToStore(response)
+      renderTable()
+      renderTableInfo()
+    } catch (err) {
+      alert(err);
+    }
+  }
+  const closeFormHandler = (e) => {
+    e.preventDefault()
+    hiddenElement(saveNoteBtn)
+    hiddenElement(updateFormBtn)
+    hiddenElement(notaForm)
+  }
+  const updateFormHandler = async (e) => {
+    e.preventDefault()
+    try {
+      const data = getDataForm()
+      let response = await noteServices.updateNote(data)
+      setNotesToStore(response)
+      renderTable()
+      renderTableInfo()
+    } catch (err) {
+      alert(err);
+    }
+  }
+  const createNoteHandler = (e) => {
+    e.preventDefault()
+    hiddenElement(updateFormBtn)
+    showElement(saveNoteBtn)
+    document.getElementById('note-form-name').value = ''
+    document.getElementById('note-form-category').value = 'Random Thought'
+    document.getElementById('note-form-date').value = ''
+    document.getElementById('note-form-content').value = ''
+    showElement(notaForm)
+  }
+}
+
+module.exports = noteForm
+
+/***/ }),
+
+/***/ "./js/modules/renderTable.js":
+/*!***********************************!*\
+  !*** ./js/modules/renderTable.js ***!
+  \***********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+const {
+  getNotesStore
+} = __webpack_require__(/*! ../store */ "./js/store.js")
+const {
+  tableHeader,
+  tableInfoHeader,
+  tableInfoRow,
+  tableRow
+} = __webpack_require__(/*! ./createElement */ "./js/modules/createElement.js")
+
+const table = document.querySelector('.table-main')
+const toggleBtn = document.querySelector('.toggle-archive')
+
+let showArchive = false
+
+const renderTable = () => {
+
+  let showNotes = getNotesStore().filter((n) => n.isArchive === showArchive)
+  table.innerHTML = tableHeader()
+  
+  for (const note of showNotes) {
+    const tr = tableRow(note)
+    table.insertAdjacentElement('beforeend', tr)
+  }
+  
+}
+
+const tableInfo = document.querySelector('.table-info')
+const renderTableInfo = () => {
+  let showCategories = getNotesStore()
+  tableInfo.innerHTML = tableInfoHeader()
+  let countNotes = []
+
+  for (const note of showCategories) {
+    const checkCategory = countNotes.find((n) => n.category === note.category)
+    console.log('checkCategory',checkCategory)
+    if (checkCategory) {
+      const newObject = {
+        category: checkCategory.category,
+        all: checkCategory.all + 1,
+        archive: note.isArchive ? checkCategory.archive +1 : checkCategory.archive
+      }
+      countNotes = countNotes.map((c) => c.category ===  newObject.category ? newObject : c)
+    } else {
+      const newObject = {
+        category: note.category,
+        all: 1,
+        archive: note.isArchive ? 1 : 0
+      }
+      countNotes.push(newObject)
+    }
+  }
+  
+  for (const category of countNotes) {
+    const tr = tableInfoRow(category)
+    tableInfo.insertAdjacentElement('beforeend', tr)
+  }
+}
+renderTableInfo()
+
+toggleBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  showArchive = !showArchive
+  e.target.innerHTML = showArchive ? 'show notes' : 'show archive'
+  renderTable()
+});
+
+module.exports = {renderTable, renderTableInfo}
+
+/***/ }),
+
+/***/ "./js/modules/table.js":
+/*!*****************************!*\
+  !*** ./js/modules/table.js ***!
+  \*****************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const {
+  deleteNote,
+  updateNote,
+  deleteNoteAll,
+  updateAll
+} = __webpack_require__(/*! ../services/noteServices */ "./js/services/noteServices.js")
+const {
+  getNoteById,
+  setNotesToStore
+} = __webpack_require__(/*! ../store */ "./js/store.js")
+const {
+  showElement,
+  hiddenElement
+} = __webpack_require__(/*! ./helper */ "./js/modules/helper.js")
+const {
+  renderTable,
+  renderTableInfo
+} = __webpack_require__(/*! ./renderTable */ "./js/modules/renderTable.js")
+
+const table = document.querySelector('.table-main')
+const saveNoteBtn = document.querySelector('#save-note')
+const notaForm = document.querySelector('#note-form')
+const updateFormBtn = document.querySelector('#update-note')
+
+const tableFoo = () => {
+  table.addEventListener('click', (e) => {
+    e.preventDefault()
+    const id = e.target.parentNode.id
+    if (e.target.hasAttribute('data-update')) {
+      updateHandler(id)
+    }
+    if (e.target.hasAttribute('data-archive')) {
+      archiveHandler(id)
+    }
+    if (e.target.hasAttribute('data-delete')) {
+      deleteHandler(id)
+    }
+    if (e.target.hasAttribute('data-delete-all')) {
+      deleteAllHandler()
+    }
+    if (e.target.hasAttribute('data-archive-all')) {
+      archiveAllHandler()
+    }
+  });
+}
+
+const deleteHandler = async (id) => {
+  try {
+    let response = await deleteNote(id)
+    setNotesToStore(response)
+    renderTable()
+    renderTableInfo()
+  } catch (err) {
+    alert(err);
+  }
+}
+
+const updateHandler = async (id) => {
+  showElement(notaForm)
+  hiddenElement(saveNoteBtn)
+  showElement(updateFormBtn)
+  const note = getNoteById(id)
+  document.getElementById('note-form-name').value = note.name
+  document.getElementById('note-form-category').value = note.category
+  document.getElementById('note-form-date').value = note.date[note.date.length - 1]
+  document.getElementById('note-form-content').value = note.content
+  document.getElementById('note-form-id').value = note.id
+}
+
+const archiveHandler = async (id) => {
+  try {
+    const note = getNoteById(id)
+    const newNote = {
+      ...note,
+      isArchive: !note.isArchive
+    }
+    let response = await updateNote(newNote)
+    setNotesToStore(response)
+    renderTable()
+    renderTableInfo()
+  } catch (err) {
+    alert(err);
+  }
+}
+
+const archiveAllHandler = async () => {
+  try {
+    let response = await updateAll({
+      isArchive: true
+    })
+    setNotesToStore(response)
+    renderTable()
+    renderTableInfo()
+  } catch (err) {
+    alert(err);
+  }
+}
+
+const deleteAllHandler = async () => {
+  const ask = confirm("you want to delete everything ?")
+  if (ask) {
+  try {
+      let response = await deleteNoteAll()
+      setNotesToStore(response)
+      renderTable()
+      renderTableInfo()
+    } catch (err) {
+      alert(err);
+    }
+  }
+}
+
+module.exports = tableFoo
+
+/***/ }),
+
+/***/ "./js/services/noteServices.js":
+/*!*************************************!*\
+  !*** ./js/services/noteServices.js ***!
+  \*************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 let notes = __webpack_require__(/*! ../dataNotes */ "./js/dataNotes.js")
@@ -221,15 +541,34 @@ let notes = __webpack_require__(/*! ../dataNotes */ "./js/dataNotes.js")
 const getNotes = () => {
   return notes
 }
+const deleteNote = (id) => {
+  notes = notes.filter((n) => n.id !== id )
+  return notes
+}
+
+
+const updateNote = (note) => {
+  notes = notes.map((n) => n.id === note.id ? note : n)
+  return notes
+}
+
+const deleteNoteAll = () => {
+  notes = []
+  return notes
+}
+const updateAll = (param) => {
+  notes = notes.map((n) => {
+    return {...n, ...param }
+  } )
+  return notes
+}
+
 
 const addNote = (note) => {
   notes = notes.concat(note)
+  return notes
 }
 
-const deleteNote = (id) => {
-  console. log(id)
-  notes = notes.filter((n) => n.id !== id )
-}
 
 const archiveNote = (id) => {
   notes = notes.map((n) =>{ 
@@ -237,19 +576,15 @@ const archiveNote = (id) => {
   })
 }
 
-const updateNote = (id) => {
-  notes = notes.map((n) => n.id === id ? '': '')
-}
 
-const archiveNoteAll = (id) => {
+
+const archiveNoteAll = () => {
   notes = notes.map((n) =>{ 
     return {...n, isArchive: true }
   })
 }
 
-const deleteNoteAll = (id) => {
-  notes = []
-}
+
 
 module.exports = {
   getNotes,
@@ -258,8 +593,44 @@ module.exports = {
   updateNote,
   deleteNoteAll,
   archiveNoteAll,
-  addNote
+  addNote,
+  updateAll
 }
+
+/***/ }),
+
+/***/ "./js/store.js":
+/*!*********************!*\
+  !*** ./js/store.js ***!
+  \*********************/
+/***/ ((module) => {
+
+
+let notes = []
+
+const getNotesStore = () => {
+  return notes
+}
+
+const setNotesToStore = (note) => {
+  notes = note
+}
+
+const clearNotesStore = () => {
+  notes = []
+}
+
+const getNoteById = (id) => {
+  return notes.find(n => n.id === id)
+}
+
+module.exports = {
+  getNotesStore,
+  setNotesToStore,
+  clearNotesStore,
+  getNoteById
+}
+
 
 /***/ })
 
@@ -296,94 +667,31 @@ var __webpack_exports__ = {};
 /*!**********************!*\
   !*** ./js/script.js ***!
   \**********************/
-let createElement = __webpack_require__(/*! ./modules/createElement */ "./js/modules/createElement.js")
-let noteChanger = __webpack_require__(/*! ./modules/noteServices */ "./js/modules/noteServices.js")
-const { generateId, showElement, hiddenElement } = __webpack_require__(/*! ./modules/helper */ "./js/modules/helper.js")
+let noteServices = __webpack_require__(/*! ./services/noteServices */ "./js/services/noteServices.js")
 
-const saveNoteBtn = document.querySelector('#save-note')
-const closeNoteBtn = document.querySelector('#close-form')
-const table = document.querySelector('.table-main')
-const createNoteBtn = document.querySelector('#create-note')
-const notaForm = document.querySelector('#note-form')
-const updateFormBtn = document.querySelector('#update-note')
 
-let showArchive = false
+const { setNotesToStore } = __webpack_require__(/*! ./store */ "./js/store.js");
+const { renderTable, renderTableInfo } = __webpack_require__(/*! ./modules/renderTable */ "./js/modules/renderTable.js");
+const tableFoo = __webpack_require__(/*! ./modules/table */ "./js/modules/table.js");
+const noteForm = __webpack_require__(/*! ./modules/noteForm */ "./js/modules/noteForm.js");
 
-const renderTable = () => {
-  let showNotes = noteChanger.getNotes().filter((n) => n.isArchive === showArchive)
-  table.innerHTML = createElement.tableHeader()
-  for (n of showNotes) {
-    const tr = createElement.tableRow(n)
-    table.insertAdjacentElement('beforeend', tr)
+document.addEventListener('DOMContentLoaded', () => {
+ 
+  async function start() {
+    try {
+      let response = await noteServices.getNotes()
+      setNotesToStore(response)
+      renderTable()
+      renderTableInfo()
+    } catch(err) {
+      alert(err);
+    }
   }
-}
-renderTable()
 
-const toggleShowArchive = () => {
-  const toggleBtn = document.querySelector('.toggle-archive')
-  toggleBtn.addEventListener('click', (event) => {
-    showArchive = !showArchive
-    event.target.innerHTML = showArchive ? 'show notes' : 'show archive'
-    renderTable()
-  });
-}
-toggleShowArchive()
-
-table.addEventListener('click', (event) => {
-  const id = event.target.parentNode.id
-  if (event.target.hasAttribute('data-update')) {
-    showElement(notaForm)
-    showElement(updateFormBtn)
-  }
-  if (event.target.hasAttribute('data-archive')) {
-    noteChanger.archiveNote(id)
-    renderTable()
-  }
-  if (event.target.hasAttribute('data-delete')) {
-    noteChanger.deleteNote(id)
-    renderTable()
-  }
+  start()
+  tableFoo()
+  noteForm()
 });
-
-const getDataForm = () => {
-  const notaForm = document.querySelector('#note-form')
-  const formData = new FormData(notaForm)
-  const note = {
-    id: generateId(),
-    name: formData.get('name'),
-    createAt: new Date(),
-    category: formData.get('category'),
-    content: formData.get('content'),
-    date: [formData.get('date')],
-    isArchive: false
-  }
-  return note
-}
-
-
-
-saveNoteBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  noteChanger.addNote(getDataForm())
-  renderTable()
-})
-
-closeNoteBtn.addEventListener('click', (e) => {
-  hiddenElement(saveNoteBtn)
-  hiddenElement(updateFormBtn)
-  hiddenElement(notaForm)
-})
-
-updateFormBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  noteChanger.updateNote(getDataForm())
-  renderTable()
-})
-
-createNoteBtn.addEventListener('click', (e) => {
-  showElement(saveNoteBtn)
-  showElement(notaForm)
-})
 
 
 })();

@@ -1,6 +1,66 @@
 .hide {
   display: none;
 }
+
 .show {
   display: block;
 }
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.table-main {
+  width: 100%;
+}
+
+.row {
+  padding: 5px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(191, 191, 191);
+  border-radius: 5px;
+  width: 100%;
+}
+.row > div:not(:last-child) {
+  width: 10%;
+  word-wrap: none;
+}
+.row > div {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.table-head {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.table-head__buttons {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.table-main__buttons {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.table-main__name {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-main__content {
+  flex: 1 1 auto;
+  width: 25%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-main__dates {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}/*# sourceMappingURL=style.css.map */

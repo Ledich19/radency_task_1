@@ -4,42 +4,60 @@ const tableRow = (n) => {
     month: 'short',
     day: 'numeric',
   };
-  const dates = n.date.map(d => d.replaceAll('-','/') )
+  const dates = n.date.map(d => d.replaceAll('-', '/'))
   const createDate = new Date(n.createAt).toLocaleString("en-US", options)
-
-  const tr = document.createElement('tr')
-        tr.className = "table__roe row"
-        tr.innerHTML = `<td class="row__name">${n.name}</td>
-                        <td class="row__created">${createDate}</td>
-                        <td class="row__category">${n.category}</td>
-                        <td class="row__content">${n.content}</td>
-                        <td class="row__dates">${dates}</td>
-                        <td id=${n.id} class="row__buttons">
-                          <button data-archive class="row__arh">A</button>
-                          <button data-delete class="row__del">D</button>
-                          <button data-update class="row__upd">U</button>
-                        </td>`
+  const tr = document.createElement('div')
+  tr.className = "table-main__row row"
+  tr.innerHTML = `
+  <div class="table-main__name">${n.name}</div>
+  <div class="table-main__created">${createDate}</div>
+  <div class="table-main__category">${n.category}</div>
+  <div class="table-main__content">${n.content}</div>
+  <div class="table-main__dates">${dates}</div>
+  <div id=${n.id} class="table-main__buttons">
+    <button data-archive class="table-main__arh">A</button>
+    <button data-delete class="table-main__del">D</button>
+    <button data-update class="table-main__upd">U</button>
+  </div>`
   return tr
 }
 
 const tableHeader = () => {
-  return  `<tr class="table__roe row">
-  <th class="row__name">Name</th>
-  <th class="row__created">Created</th>
-  <th class="row__category">Categoryf</th>
-  <th class="row__content">Content</th>
-  <th class="row__dates"></th>
-  <th class="row__btns">
-    <button class="row__arh">A</button>
-    <button class="row__del">D</button>
-  </th>
+  return `<div class="table-head row">
+  <div class="table-head__name">Name</div>
+  <div class="table-head__created">Created</div>
+  <div class="table-head__category">Category</div>
+  <div class="table-head_content">Content</div>
+  <div class="table-head__dates">dates</div>
+  <div class="table-head__buttons">
+    <button data-archive-all id="table__arhAll">A</button>
+    <button data-delete-all id="table__delAll">D</button>
+  </div>
+  </div>`
+}
+
+const tableInfoHeader = () => {
+  return `<tr class="table-info__head ">
+  <th class="table-info__title">Category</th>
+  <th class="table-info__title">active</th>
+  <th class="table-info__title">archived</th>
   </tr>`
 }
 
-
-const createElement = {
-  tableRow,
-  tableHeader
+const tableInfoRow = (n) => {
+  const tr = document.createElement('tr')
+  tr.className = "able-info__roe row"
+  tr.innerHTML = `
+        <td class="able-info__category">${n.category}</td>
+        <td class="able-info__active">${n.all - n.archive}</td>
+        <td class="able-info__archived">${n.archive}</td>
+        </td>`
+  return tr
 }
 
-module.exports = createElement
+module.exports = {
+  tableHeader,
+  tableRow,
+  tableInfoHeader,
+  tableInfoRow
+}

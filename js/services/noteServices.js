@@ -3,15 +3,34 @@ let notes = require('../dataNotes')
 const getNotes = () => {
   return notes
 }
+const deleteNote = (id) => {
+  notes = notes.filter((n) => n.id !== id )
+  return notes
+}
+
+
+const updateNote = (note) => {
+  notes = notes.map((n) => n.id === note.id ? note : n)
+  return notes
+}
+
+const deleteNoteAll = () => {
+  notes = []
+  return notes
+}
+const updateAll = (param) => {
+  notes = notes.map((n) => {
+    return {...n, ...param }
+  } )
+  return notes
+}
+
 
 const addNote = (note) => {
   notes = notes.concat(note)
+  return notes
 }
 
-const deleteNote = (id) => {
-  console. log(id)
-  notes = notes.filter((n) => n.id !== id )
-}
 
 const archiveNote = (id) => {
   notes = notes.map((n) =>{ 
@@ -19,19 +38,15 @@ const archiveNote = (id) => {
   })
 }
 
-const updateNote = (id) => {
-  notes = notes.map((n) => n.id === id ? '': '')
-}
 
-const archiveNoteAll = (id) => {
+
+const archiveNoteAll = () => {
   notes = notes.map((n) =>{ 
     return {...n, isArchive: true }
   })
 }
 
-const deleteNoteAll = (id) => {
-  notes = []
-}
+
 
 module.exports = {
   getNotes,
@@ -40,5 +55,6 @@ module.exports = {
   updateNote,
   deleteNoteAll,
   archiveNoteAll,
-  addNote
+  addNote,
+  updateAll
 }

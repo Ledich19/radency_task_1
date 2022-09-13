@@ -10,37 +10,38 @@
 </head>
 
 <body>
-  <table class="table-main">
+  <div class="container">
+    <div class="table-main">
+    </div>
 
-
-
-  </table>
-  <button id="create-note">create note</button>
-  <button class="toggle-archive">show archive</button>
-  <table class="table-info">
-
-
-
-  </table>
-
-  <form id="note-form" method="post" action="#" class="hide">
-    <span>Name: </span>
-    <input type="text" id="name-note" name="name">
-    <span>Category: </span>
-    <select class="note-form__category" id="name" name="category" value="Random Thought">
-      <option value="Random Thought">Random Thought</option>
-      <option value="Idea">Idea</option>
-      <option value="Task">Task</option>
-    </select>
-    <span>Date: </span>
-    <input type="date" name="date">
-    <span>Note: </span>
-   <textarea type="text" name="content"></textarea>
-   <button id="close-form" type="button">close</button>
-  </form>
-
-  <button type="button" class="hide" id="save-note">save</button>
-  <button type="button" class="hide" id="update-note">update</button>
+    <button id="create-note">create note</button>
+    <button class="toggle-archive">show archive</button>
+    <table class="table-info">
+  
+  
+  
+    </table>
+  
+    <form id="note-form" method="post" action="#" class="hide">
+      <span>Name: </span>
+      <input type="text" id="note-form-name" name="name">
+      <span>Category: </span>
+      <select id="note-form-category" name="category" value="Random Thought">
+        <option value="Random Thought">Random Thought</option>
+        <option value="Idea">Idea</option>
+        <option value="Task">Task</option>
+      </select>
+      <span>Date: </span>
+      <input type="date" id="note-form-date" name="date">
+      <span>Note: </span>
+     <textarea name="content" id="note-form-content"></textarea>
+     <button id="close-form" type="button">close</button>
+     <input type="hidden" name="id" id="note-form-id">
+    </form>
+  
+    <button type="button" class="hide" id="save-note">save</button>
+    <button type="button" class="hide" id="update-note">update</button>
+  </div>
 
 </body>
 <script src="./js/js.bundle.js"></script>

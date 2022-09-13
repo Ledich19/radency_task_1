@@ -1,0 +1,147 @@
+/*Обнуление*/
+*{
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+*,*:before,*:after{
+	box-sizing: border-box;
+}
+:focus,:active{outline: none;}
+a:focus,a:active{outline: none;}
+
+nav,footer,header,aside{display: block;}
+
+html,body{
+	height: 100%;
+	width: 100%;
+	font-size: 100%;
+	line-height: 1;
+	font-size: 16px;
+}
+
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.container {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.table-main,
+.table-info {
+  width: 100%;
+}
+
+.row {
+  padding: 5px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(172, 169, 169);
+  border-radius: 5px;
+  width: 100%;
+
+  &>div:not(:last-child) {
+    width: 10%;
+    word-wrap: none
+  }
+
+  &>div {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+.table-head {
+  font-size: 1.2rem;
+  font-weight: bold;
+
+  &__buttons {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+}
+
+.table-main {
+  &__buttons {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  &__name {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__content {
+    flex: 1 1 auto;
+
+    width: 25%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__dates {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.table-info {
+  &__row {
+    justify-content: space-around;
+    & > div {
+      display: flex;
+      width: 33%;
+      justify-content: center;
+    }
+  }
+}
+
+.form-wrapper {
+  top: 0;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.751);
+  height: 100%;
+  width: 100%;
+}
+
+#note-form {
+  padding: 5px;
+  background: rgb(182, 182, 182);
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+#note-form-content{
+  resize: none;
+  height: 50px;
+}
+#close-form, #save-note, #update-note , #create-note ,#toggle-archive{
+  background: rgb(126, 124, 124);
+  border-radius: 3px;
+  padding: 3px;
+  margin-top: 5px;
+}
+#create-note {
+  margin-left: 10px;
+}
+
+.table-main__arh,.table-main__del,.table-main__upd ,#table__arhAll,#table__delAll{
+padding: 3px;
+margin-left: 3px;
+border-radius: 3px;
+}
